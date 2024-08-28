@@ -10,8 +10,6 @@ Conducting Exploratory Data Analysis to extract findings and discover insights o
 
 
 
-
-
 # About NBA Players dataset
 
 The dataset contains over two decades of data on each player who has been part of an NBA teams' roster. Each of player has variables such as height, weight, age, draft year, draft round, the team where he played, some average statistics like points, assists and rebounds, shoot efficency percentage , net rating etc. The dataset has got no missing value except college column. 
@@ -19,9 +17,10 @@ The dataset contains over two decades of data on each player who has been part o
 
 # About Exploratory Data Analysis
 
-First of all, one will see descriptive statistics about the players. Specifically, there will be filtered players like LeBron James, Kobe Bryant and their basic statistics. After that, there will be Data Preprocessing above the analysis. Moreover, this Data Preprocessing part includes Missing Value Analysis so that one able to learn more about the dataset. Aftermath, there will be splitting datasets into Eastern Conference teams and Western Conference teams in order to comparing their average statistics such as points, assists and rebounds. 
+First of all, one will see descriptive statistics about the players. Specifically, there will be filtered players like LeBron James, Kobe Bryant and their basic statistics. After that, there will be Data Preprocessing above the analysis. Moreover, this Data Preprocessing part includes Missing Value Analysis so that one able to learn more about the dataset. Aftermath, there will be splitted datasets into Eastern Conference teams and Western Conference teams in order to comparing their average statistics such as points, assists and rebounds. The next action is Feature Engineering so that add on new findings and discover new pattern if there any. 
 
 
+In the final part, there will be splitted data into three categories that are called 'Isolation and Mid Range Dominence Era', 'Defence Strategy and Analitics' and '3-Point and Positionless Game Era'. Thus, one can see the difference these three different era with various graphics. I organized these graphs into Univariate, Bivariate and Multivariate Analysis sections.
 
 
 

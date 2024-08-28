@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
+
 pd.set_option('display.max_columns', None)
 
 df = pd.read_csv('all_seasons.csv')
@@ -16,9 +18,20 @@ df.shape
 df.columns
 
 
+# Dropping the unnamed column
+df.drop(columns='Unnamed: 0',inplace = True)
+
+
+# Filtered most known players 
 kd_filtered = df[df['player_name'] == 'Kevin Durant']
 kobe_filtered = df[df['player_name'] == 'Kobe Bryant']
 lb_filtered = df[df['player_name'] == 'LeBron James']
+je_filtered = df[df['player_name'] == 'Joel Embiid']
+
+print(f' Kevin Durant :\n {kd_filtered}')
+print(f' Kobe Bryant :\n {kobe_filtered}')
+print(f' LeBron James :\n {lb_filtered}')
+print(f' Joel Embiid :\n {je_filtered}')
 
 
 
@@ -28,6 +41,13 @@ categorical_vars = df.select_dtypes(include=['object']).columns.tolist()
 
 print('Numerical variables:', numerical_vars)
 print('Categorical variables:', categorical_vars)
+
+
+for i, col in enumerate(numerical_vars):
+    sns.distplot(df[col], hist=True, kde=True, bins=20)
+    plt.show()
+
+
 
 # Data Preprocessing
 
@@ -84,42 +104,23 @@ west_college.first()
 
 
 
-
-#Comparing for averages' average statistics for both conferences
+# Comparing for averages' average statistics for both conferences
 east_mean_pts = df_east_conf['pts'].mean().round(2)
-print(east_mean_pts)
+print(f' East Conference teams average point :\n {east_mean_pts}')
 west_mean_pts = df_west_conf['pts'].mean().round(2)
-print(west_mean_pts)
+print(f' West Conference teams average point :\n {west_mean_pts}')
 
 
 east_mean_ast = df_east_conf['ast'].mean().round(2)
-print(east_mean_ast)
+print(f' East Conference teams average assist :\n {east_mean_ast}')
 west_mean_ast = df_west_conf['ast'].mean().round(2)
-print(west_mean_ast)
+print(f' West Conference teams average assist :\n {west_mean_ast}')
 
 
 east_mean_reb = df_east_conf['reb'].mean().round(2)
-print(east_mean_reb)
+print(f' East Conference teams average rebound :\n {east_mean_reb}')
 west_mean_reb = df_west_conf['reb'].mean().round(2)
-print(west_mean_reb)
-
-
-east_mean_dreb_pct = df_east_conf['dreb_pct'].mean().round(2)
-print(east_mean_dreb_pct)
-west_mean_dreb_pct = df_west_conf['dreb_pct'].mean().round(2)
-print(west_mean_dreb_pct)
-
-
-east_mean_oreb_pct = df_east_conf['oreb_pct'].mean().round(2)
-print(east_mean_oreb_pct)
-west_mean_oreb_pct = df_west_conf['oreb_pct'].mean().round(2)
-print(west_mean_oreb_pct)
-
-
-east_mean_ts_pct = df_east_conf['ts_pct'].mean().round(2)
-print(east_mean_ts_pct)
-west_mean_ts_pct = df_west_conf['ts_pct'].mean().round(2)
-print(west_mean_ts_pct)
+print(f' West Conference teams average rebound :\n {west_mean_reb}')
 
 
 
@@ -131,7 +132,7 @@ def fe(df, drop):
 
     return df
 
-drop = ['Unnamed: 0','player_name', 'team_abbreviation', 'college','draft_round','draft_number','draft_year', 'country']
+drop = ['player_name', 'team_abbreviation', 'college','draft_round','draft_number','draft_year', 'country']
 nba = fe(df, drop)
 nba.info()
 nba.head()
@@ -141,6 +142,13 @@ nba.head()
 nba['player_height_m'] = nba['player_height'] / 100
 nba['BMI'] = nba['player_weight'] / (nba['player_height_m'] ** 2)
 print(nba['BMI'])
+
+
+plt.title('BMI Distribution Plot')
+sns.distplot(nba['BMI'])
+plt.show()
+
+
 
 # Converting the season column from string to integer
 nba['season'] = nba['season'].apply(lambda x: int(x[:4]))
@@ -161,53 +169,11 @@ nba_DSA = nba[(nba['season'] >= 2005) & (nba['season'] < 2015)]
 nba_TPB = nba[(nba['season'] >= 2015)]
 
 
-# Check for the total rows
-len(nba_ISO) + len(nba_DSA) + len(nba_TPB)
-
-
 
 # Exploratory Data Analysis
 
 
-cols = ['age', 'player_height', 'player_weight', 'gp', 'pts', 'reb', 'ast',
-       'net_rating', 'oreb_pct', 'dreb_pct', 'usg_pct', 'ts_pct', 'ast_pct',
-       'season', 'player_height_m', 'BMI']
-
-
-
-# Correlation heatmaps 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-# Correlation heatmaps of NBA 1996-2004
-sns.heatmap(nba_ISO.corr(),annot=True) 
-plt.show()
-
-# Correlation heatmaps of NBA 2004-2015
-sns.heatmap(nba_DSA.corr(),annot=True) 
-plt.show()
-
-
-# Correlation heatmap of NBA 2015-2022
-sns.heatmap(nba_TPB.corr(),annot=True) 
-plt.show()
-
-
-# Correlation upper triangle heatmaps
-mask_ISO = np.triu(np.ones_like(nba_ISO.corr(), dtype=int))
-heatmap = sns.heatmap(nba_ISO.corr(), mask=mask_ISO, vmin=-1, vmax=1, annot=False, cmap='BrBG')
-plt.show()
-
-mask_DSA = np.triu(np.ones_like(nba_DSA.corr(), dtype=int))
-heatmap = sns.heatmap(nba_DSA.corr(), mask=mask_DSA, vmin=-1, vmax=1, annot=False, cmap='BrBG')
-plt.show()
-
-mask_TPB = np.triu(np.ones_like(nba_TPB.corr(), dtype=int))
-heatmap = sns.heatmap(nba_TPB.corr(), mask=mask_TPB, vmin=-1, vmax=1, annot=False, cmap='BrBG')
-plt.show()
-
-
+# Univariate Analysis
 # Histogram plots
 fig, axs = plt.subplots(1, 2, sharey=True, tight_layout=True)
 axs[0].hist(nba_ISO['player_height'], bins=40, label='Player Height')
@@ -233,4 +199,53 @@ axs[0].set_xlabel('Height')
 axs[1].hist(nba_TPB['player_weight'], bins=40, color='green',label='Player Weight')
 axs[1].set_xlabel('Weight')
 plt.suptitle(t='Between 2015-2022 Seasons Height And Weight Distributions')
+plt.show()
+
+
+
+#Bivariate Analysis
+# Box plot through the seasons 
+plt.figure(figsize=(14,6))
+sns.boxplot(data=nba_ISO, x="season", y="ts_pct")
+plt.show()
+
+
+plt.figure(figsize=(14,6))
+sns.boxplot(data=nba_DSA, x="season", y="ts_pct")
+plt.show()
+
+
+plt.figure(figsize=(14,6))
+sns.boxplot(data=nba_TPB, x="season", y="ts_pct")
+plt.show()
+
+
+
+
+# Multivariate Analysis
+# Correlation matrix heatmaps of NBA 1996-2004
+sns.heatmap(nba_ISO.corr(),annot=True) 
+plt.show()
+
+# Correlation heatmaps of NBA 2004-2015
+sns.heatmap(nba_DSA.corr(),annot=True) 
+plt.show()
+
+
+# Correlation heatmap of NBA 2015-2022
+sns.heatmap(nba_TPB.corr(),annot=True) 
+plt.show()
+
+
+# Correlation upper triangle heatmaps
+mask_ISO = np.triu(np.ones_like(nba_ISO.corr(), dtype=int))
+heatmap = sns.heatmap(nba_ISO.corr(), mask=mask_ISO, vmin=-1, vmax=1, annot=False, cmap='BrBG')
+plt.show()
+
+mask_DSA = np.triu(np.ones_like(nba_DSA.corr(), dtype=int))
+heatmap = sns.heatmap(nba_DSA.corr(), mask=mask_DSA, vmin=-1, vmax=1, annot=False, cmap='BrBG')
+plt.show()
+
+mask_TPB = np.triu(np.ones_like(nba_TPB.corr(), dtype=int))
+heatmap = sns.heatmap(nba_TPB.corr(), mask=mask_TPB, vmin=-1, vmax=1, annot=False, cmap='BrBG')
 plt.show()

@@ -249,3 +249,4 @@ plt.show()
 mask_TPB = np.triu(np.ones_like(nba_TPB.corr(), dtype=int))
 heatmap = sns.heatmap(nba_TPB.corr(), mask=mask_TPB, vmin=-1, vmax=1, annot=False, cmap='BrBG')
 plt.show()
+
